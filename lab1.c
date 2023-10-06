@@ -15,4 +15,13 @@ char* readString(const char* fileName) {
         exit(EXIT_FAILURE);
     }
 
+    if (getline(&line, &len, file) == -1) {
+        perror("Error reading line");
+        fclose(file);
+        exit(EXIT_FAILURE);
+    }
+
+    fclose(file);
+    return line;
 }
+
