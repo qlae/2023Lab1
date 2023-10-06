@@ -1,22 +1,25 @@
-// lab1.c
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "lab1.h"
 
 char* readString(const char* fileName) {
-    char* line = NULL;
-    size_t len = 0;
-    FILE* file = fopen(fileName, "r");
-    
-    if (file == NULL) {
-        perror("Error opening file");
+    char* line = (char*)malloc(MAX_LINE_LEN + 1); 
+    if (line == NULL) {
+        perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
 
-    if (getline(&line, &len, file) == -1) {
+    FILE* file = fopen(fileName, "r"); 
+    if (file == NULL) {
+        perror("Error opening file");
+        free(line); 
+        exit(EXIT_FAILURE);
+    }
+
+    if (fgets(line, MAX_LINE_LEN + 1, file) == NULL) {
         perror("Error reading line");
+        free(line); 
         fclose(file);
         exit(EXIT_FAILURE);
     }
@@ -27,10 +30,20 @@ char* readString(const char* fileName) {
 
 char* mysteryExplode(const char* str) {
     int len = strlen(str);
-    char* result = (char*)malloc((len * (len + 1) + 1) * sizeof(char));
-    
+    char* result = (char*)malloc(len * (len + 1) + 1);
+
     if (result == NULL) {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
 
+    int index = 0;
+    for (int i = 0; i < len; i++) {
+        for (int j = 0; j <= i; j++) {
+            result[index++] = str[j];
+        }
+    }
+
+    result[index] = '\0';
+    return result;
+}
