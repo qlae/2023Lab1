@@ -25,3 +25,12 @@ char* readString(const char* fileName) {
     return line;
 }
 
+char* mysteryExplode(const char* str) {
+    int len = strlen(str);
+    char* result = (char*)malloc((len * (len + 1) + 1) * sizeof(char));
+    
+    if (result == NULL) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+
